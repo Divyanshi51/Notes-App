@@ -36,7 +36,8 @@
         placeholder="Title here...">
     </div>
     <div class="mb-3">
-      <label for="exampleFormControlTextarea1" class="form-label">Textarea</label>
+      <label for="exampleFormControlTextarea1" class="form-label">Text
+        Area</label>
       <textarea class="form-control" id="NoteTextarea" rows="3"></textarea>
     </div>
     <button type="button" class="btn btn-primary" id="AddNote">Add Note</button>
@@ -53,31 +54,34 @@
   let AddNote = document.getElementById("AddNote");
   let NotesContainer = document.getElementById("NotesContainer");
 
-  //getting  pre-stored items
-  function StoredItems() {
-    for (const [key, value] of Object.entries(localStorage)) {
-      let Note = document.createElement('div');
-      Note.innerHTML = `<div class="card" style="width: 15rem;">
+  function noteCreater(p1, p2) {
+    let Note = document.createElement('div');
+    Note.innerHTML = `<div class="card" style="width: 15rem;">
           <div class="card-body">
-            <h5 class="card-title">${key}</h5>
-            <p class="card-text">${value}</p>
+            <h5 class="card-title">${p1}</h5>
+            <p class="card-text">${p2}</p>
             <a href="#" id="DeleteBtn" class="btn btn-danger" onclick="remove(this)" > Delete</a>
           </div>
         </div> `
-      NotesContainer.appendChild(Note);
+    NotesContainer.appendChild(Note);
+  }
+
+  AddNote.addEventListener('click', () => GetInput());
+
+  function StoredItems() {
+    for (const [key, value] of Object.entries(localStorage)) {
+      noteCreater(key, value);
     }
   }
+
   window.addEventListener("load", () => {
     StoredItems();
   });
 
-
   function Reset() {
-    TitleTextarea.value = "  ";
-    NoteTextarea.value = " ";
-  }
-  if (TitleTextarea.value !== " ") {
-    AddNote.addEventListener('click', () => GetInput())
+    TitleTextarea.value = '';
+    NoteTextarea.value = '';
+
   }
 
   function remove(input) {
@@ -89,19 +93,17 @@
   }
 
   function GetInput() {
-    let Note = document.createElement('div');
-    Note.innerHTML = `<div class="card" style="width: 15rem;">
-          <div class="card-body">
-            <h5 class="card-title">${TitleTextarea.value}</h5>
-            <p class="card-text">${NoteTextarea.value}</p>
-            <a href="#" id="DeleteBtn" class="btn btn-danger" onclick="remove(this)" > Delete</a>
-          </div>
-        </div> `
-
-    localStorage.setItem(TitleTextarea.value, NoteTextarea.value);
-    NotesContainer.appendChild(Note);
-    Reset()
+    if (TitleTextarea.value != '') {
+      noteCreater(TitleTextarea.value, NoteTextarea.value)
+      console.log(TitleTextarea.value);
+      localStorage.setItem(TitleTextarea.value, NoteTextarea.value);
+      Reset()
+    }
+    else {
+      window.alert("Something is missing!");
+    }
   }
+
 </script>
 
 </html>
